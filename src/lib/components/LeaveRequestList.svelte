@@ -13,13 +13,27 @@
     } = $props<{
         requests: LeaveRequest[];
         getMemberName: (memberId: string) => string;
-        onStatusChange: (requestId: string, status: LeaveStatus) => void;
+        onStatusChange: (requestId: string, status: LeaveStatus) => boolean;
         onDelete: (requestId: string) => void;
     }>();
 
-    function handleStatusChange(event: Event, requestId: string) {
+    function handleStatusChange(event: Event, request: LeaveRequest) {
         const target = event.target as HTMLSelectElement;
-        onStatusChange(requestId, target.value as LeaveStatus);
+        const updated = onStatusChange(request.id, target.value as LeaveStatus);
+
+        if (!updated) {
+            target.value = request.status;
+        }
+    }
+
+    function handleDelete(request: LeaveRequest) {
+        const confirmed = confirm(
+            `Delete leave request for ${getMemberName(request.memberId)} from ${request.startDate} to ${request.endDate}?`,
+        );
+
+        if (!confirmed) return;
+
+        onDelete(request.id);
     }
 </script>
 
@@ -27,7 +41,7 @@
     <h2>Leave Requests</h2>
 
     {#if requests.length === 0}
-        <p>No leave requests found.</p>
+        <p>No leave requests match the current filters.</p>
     {:else}
         <div class="table-wrapper">
             <table>
@@ -50,17 +64,20 @@
                         <td>{request.endDate}</td>
                         <td>{request.reason}</td>
                         <td>
-                            <select
-                                    value={request.status}
-                                    onchange={(event) => handleStatusChange(event, request.id)}
-                            >
-                                <option value="pending">Pending</option>
-                                <option value="approved">Approved</option>
-                                <option value="rejected">Rejected</option>
-                            </select>
+                            <div class="status-cell">
+                                <select
+                                        class={`status-select status-${request.status}`}
+                                        value={request.status}
+                                        onchange={(event) => handleStatusChange(event, request)}
+                                >
+                                    <option class="status-pending" value="pending">Pending</option>
+                                    <option class="status-approved" value="approved">Approved</option>
+                                    <option class="status-rejected" value="rejected">Rejected</option>
+                                </select>
+                            </div>
                         </td>
                         <td>
-                            <button type="button" class="secondary" onclick={() => onDelete(request.id)}>
+                            <button type="button" class="secondary" onclick={() => handleDelete(request)}>
                                 Delete
                             </button>
                         </td>

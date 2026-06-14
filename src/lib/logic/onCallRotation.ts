@@ -6,12 +6,14 @@ import {
     parseISO,
     startOfWeek,
 } from "date-fns";
-import type {LeaveRequest} from "$lib/types";
+import type {
+    LeaveRequest,
+    LeaveStatus,
+} from "$lib/types";
 import {rangesOverlap} from "./leaveValidation";
 import {teamMembers} from "$lib/data/teamMembers";
+import {ROTATION_START_DATE} from "$lib/config";
 
-
-export const ROTATION_START_DATE = "2026-06-15";
 
 export type OnCallWeek = {
     startDate: string;
@@ -55,16 +57,39 @@ export function getUpcomingOnCallWeeks(count: number, fromDate = new Date()): On
     });
 }
 
+export function isCurrentWeek(weekStartDate: string, fromDate = new Date()): boolean {
+    return weekStartDate === toDateString(getMonday(fromDate));
+}
+
+function getLeaveForWeekByStatus(
+    requests: LeaveRequest[],
+    memberId: string,
+    weekStartDate: string,
+    weekEndDate: string,
+    status: LeaveStatus,
+): LeaveRequest | undefined {
+    return requests.find((request: LeaveRequest): boolean => {
+        if (request.memberId !== memberId) return false;
+        if (request.status !== status) return false;
+
+        return rangesOverlap(request.startDate, request.endDate, weekStartDate, weekEndDate);
+    });
+}
+
 export function getApprovedLeaveConflictForWeek(
     requests: LeaveRequest[],
     memberId: string,
     weekStartDate: string,
     weekEndDate: string,
 ): LeaveRequest | undefined {
-    return requests.find((request: LeaveRequest): boolean => {
-        if (request.memberId !== memberId) return false;
-        if (request.status !== "approved") return false;
+    return getLeaveForWeekByStatus(requests, memberId, weekStartDate, weekEndDate, "approved");
+}
 
-        return rangesOverlap(request.startDate, request.endDate, weekStartDate, weekEndDate);
-    });
+export function getPendingLeaveWarningForWeek(
+    requests: LeaveRequest[],
+    memberId: string,
+    weekStartDate: string,
+    weekEndDate: string,
+): LeaveRequest | undefined {
+    return getLeaveForWeekByStatus(requests, memberId, weekStartDate, weekEndDate, "pending");
 }

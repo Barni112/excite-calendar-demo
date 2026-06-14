@@ -16,7 +16,18 @@ export function hasOverlappingLeave(
     startDate: string,
     endDate: string,
 ): boolean {
+    return hasOverlappingLeaveExcludingRequest(requests, undefined, memberId, startDate, endDate);
+}
+
+export function hasOverlappingLeaveExcludingRequest(
+    requests: LeaveRequest[],
+    ignoredRequestId: string | undefined,
+    memberId: string,
+    startDate: string,
+    endDate: string,
+): boolean {
     return requests.some((request: LeaveRequest): boolean => {
+        if (request.id === ignoredRequestId) return false;
         if (request.memberId !== memberId) return false;
         if (request.status === "rejected") return false;
         return rangesOverlap(request.startDate, request.endDate, startDate, endDate);

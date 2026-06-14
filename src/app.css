@@ -55,6 +55,22 @@ button:hover {
     box-shadow: 0 1px 4px rgb(0 0 0 / 0.08);
 }
 
+.section-header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.section-header h2 {
+    margin: 0;
+}
+
+.compact-label {
+    min-width: 11rem;
+}
+
 .team-list {
     display: flex;
     gap: 0.75rem;
@@ -120,6 +136,14 @@ tr.conflict {
     background: #fee2e2;
 }
 
+tr.warning {
+    background: #fef3c7;
+}
+
+tr.current-week td:first-child {
+    border-left: 4px solid #2563eb;
+}
+
 .error-box {
     background: #fee2e2;
     color: #991b1b;
@@ -134,13 +158,41 @@ tr.conflict {
     padding-left: 1.25rem;
 }
 
+.status-cell {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.status-select {
+    max-width: 10rem;
+    font-weight: 600;
+}
+
+.status-pending {
+    background: #fef3c7;
+    border-color: #f59e0b;
+    color: #92400e;
+}
+
+.status-approved {
+    background: #dcfce7;
+    border-color: #22c55e;
+    color: #166534;
+}
+
+.status-rejected {
+    background: #e5e7eb;
+    border-color: #9ca3af;
+    color: #374151;
+}
+
 .on-call-table {
     table-layout: fixed;
     width: 100%;
 }
 
 .on-call-table .week-start-col {
-    width: 16%;
+    width: 18%;
 }
 
 .on-call-table .week-end-col {
@@ -152,7 +204,23 @@ tr.conflict {
 }
 
 .on-call-table .conflict-col {
-    width: 50%;
+    width: 48%;
+}
+
+.week-start-cell {
+    display: grid;
+    gap: 0.35rem;
+}
+
+.current-week-badge {
+    display: inline-block;
+    width: fit-content;
+    border-radius: 999px;
+    padding: 0.15rem 0.5rem;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 0.8rem;
+    font-weight: 700;
 }
 
 .conflict-cell {
@@ -161,9 +229,28 @@ tr.conflict {
     word-break: break-word;
 }
 
+.conflict-message {
+    color: #991b1b;
+}
+
+.warning-message {
+    color: #92400e;
+}
+
 .no-conflict {
     display: inline-block;
     min-width: 8rem;
     color: #166534;
     font-weight: 600;
+}
+
+@media (max-width: 700px) {
+    .page {
+        padding: 1rem;
+    }
+
+    .section-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
 }

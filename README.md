@@ -11,12 +11,16 @@ The application uses a fixed team list, allows leave requests to be created and 
 * View leave requests in a list
 * Filter leave requests by team member and status
 * Update leave request status
+* Prevent status changes that would create overlapping pending or approved leave
 * Delete leave requests
 * Prevent overlapping leave requests for the same team member
 * View weekly on-call rotation
 * Highlight conflicts when the on-call person has approved leave
+* Show a warning when the on-call person has pending leave
+* Choose how many upcoming on-call weeks to display
+* Highlight the current on-call week
 * Persist leave requests in browser localStorage
-* Unit tests for date overlap and on-call rotation logic
+* Unit tests for date overlap, filtering, and on-call rotation logic
 
 ## Team Members
 
@@ -64,6 +68,7 @@ If the on-call person has approved leave during their on-call week, the schedule
 * TypeScript
 * date-fns
 * localStorage
+* Vite environment variables
 * Vitest
 
 ## Setup
@@ -96,6 +101,23 @@ Run unit tests:
 npm test
 ```
 
+## Environment Configuration
+
+The app has sensible defaults, but these values can be configured with Vite environment variables. Copy `.env.example` to `.env` if you want to override them.
+
+```bash
+cp .env.example .env
+```
+
+Available variables:
+
+```text
+VITE_STORAGE_KEY=team-leave-calendar-requests
+VITE_ROTATION_START_DATE=2026-06-15
+VITE_DEFAULT_ON_CALL_WEEK_COUNT=8
+VITE_ON_CALL_WEEK_COUNT_OPTIONS=4,8,12
+```
+
 
 ## Assumptions
 
@@ -106,7 +128,7 @@ npm test
 * Pending and approved leave requests block overlapping leave requests for the same team member.
 * Rejected leave requests do not block new leave requests.
 * On-call conflicts are highlighted only for approved leave.
-* Pending leave during an on-call week is not treated as a required conflict.
+* Pending leave during an on-call week is shown as a warning, not as a blocking conflict.
 * The on-call rotation starts on Monday, `2026-06-15`, with Alice.
 * The app is intended to run locally.
 
@@ -137,6 +159,7 @@ These two requests do not overlap:
 * View leave requests in a list
 * Prevent overlapping leave requests for the same person
 * Mark leave requests as Pending, Approved, or Rejected
+* Prevent invalid status changes that would create overlapping active leave
 * View an on-call rotation schedule
 * Show clearly when the on-call person is on approved leave
 * Include setup and run instructions
@@ -150,6 +173,10 @@ These two requests do not overlap:
 * localStorage persistence
 * Basic unit tests
 * Improved visual conflict highlighting
+* Visual status styling for Pending, Approved, and Rejected requests
+* Pending leave warnings in the on-call schedule
+* Current week highlighting
+* Configurable on-call week count
 
 ## Not Implemented
 
@@ -177,10 +204,13 @@ src/
     data/
       teamMembers.ts
     logic/
+      leaveFilters.test.ts
+      leaveFilters.ts
       leaveValidation.test.ts
       leaveValidation.ts
       onCallRotation.test.ts
       onCallRotation.ts
+    config.ts
     types.ts
   routes/
     +layout.svelte
@@ -194,6 +224,7 @@ The unit tests focus on the most important business logic:
 
 * inclusive date overlap detection
 * preventing overlapping leave for the same member
+* filtering and sorting leave requests
 * ignoring rejected leave during overlap checks
 * weekly on-call rotation calculation
 * approved leave conflict detection

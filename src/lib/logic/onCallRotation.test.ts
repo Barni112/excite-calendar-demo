@@ -6,6 +6,8 @@ import {
 import {
     getApprovedLeaveConflictForWeek,
     getOnCallMemberIdForWeek,
+    getPendingLeaveWarningForWeek,
+    isCurrentWeek,
 } from "./onCallRotation";
 import type {LeaveRequest} from "$lib/types";
 
@@ -32,10 +34,10 @@ describe("getOnCallMemberIdForWeek", () => {
     });
 });
 
-describe("getApprovedLeaveConflictForWeek", () => {
+describe("weekly leave conflict helpers", () => {
     const requests: LeaveRequest[] = [
         {
-            id: "1-1-1-1",
+            id: "approved-conflict",
             memberId: "1",
             startDate: "2026-01-05",
             endDate: "2026-01-06",
@@ -43,7 +45,7 @@ describe("getApprovedLeaveConflictForWeek", () => {
             status: "approved",
         },
         {
-            id: "2-2-2-2",
+            id: "pending-warning",
             memberId: "2",
             startDate: "2026-01-12",
             endDate: "2026-01-13",
@@ -60,10 +62,10 @@ describe("getApprovedLeaveConflictForWeek", () => {
             "2026-01-11",
         );
 
-        expect(conflict?.id).toBe("1");
+        expect(conflict?.id).toBe("approved-conflict");
     });
 
-    it("ignores pending leave for required conflict highlighting", () => {
+    it("ignores pending leave for approved conflict highlighting", () => {
         const conflict = getApprovedLeaveConflictForWeek(
             requests,
             "2",
@@ -72,5 +74,26 @@ describe("getApprovedLeaveConflictForWeek", () => {
         );
 
         expect(conflict).toBeUndefined();
+    });
+
+    it("detects pending leave warning", () => {
+        const warning = getPendingLeaveWarningForWeek(
+            requests,
+            "2",
+            "2026-01-12",
+            "2026-01-18",
+        );
+
+        expect(warning?.id).toBe("pending-warning");
+    });
+});
+
+describe("isCurrentWeek", () => {
+    it("detects the week containing the supplied date", () => {
+        expect(isCurrentWeek("2026-06-15", new Date("2026-06-18T12:00:00"))).toBe(true);
+    });
+
+    it("returns false for a different week", () => {
+        expect(isCurrentWeek("2026-06-22", new Date("2026-06-18T12:00:00"))).toBe(false);
     });
 });
