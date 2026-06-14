@@ -36,29 +36,18 @@ const requests: LeaveRequest[] = [
 
 describe("filterAndSortLeaveRequests", () => {
     it("sorts requests by start date", () => {
-        expect(filterAndSortLeaveRequests(requests, "all", "all").map((request) => request.id)).toEqual([
-            "2",
-            "1",
-            "3",
-        ]);
+        expect(filterAndSortLeaveRequests(requests, "all", "all").map((request) => request.id)).toEqual(["2", "1", "3"]);
     });
 
     it("filters by member", () => {
-        expect(filterAndSortLeaveRequests(requests, "1", "all").map((request) => request.id)).toEqual([
-            "2",
-            "1",
-        ]);
+        expect(filterAndSortLeaveRequests(requests, "1", "all").map((request) => request.id)).toEqual(["2", "1"]);
     });
 
     it("filters by status", () => {
-        expect(filterAndSortLeaveRequests(requests, "all", "approved").map((request) => request.id)).toEqual([
-            "3",
-        ]);
+        expect(filterAndSortLeaveRequests(requests, "all", "approved").map((request) => request.id)).toEqual(["3"]);
     });
 
     it("filters by member and status together", () => {
-        expect(filterAndSortLeaveRequests(requests, "1", "pending").map((request) => request.id)).toEqual([
-            "1",
-        ]);
+        expect(filterAndSortLeaveRequests(requests, "1", "pending").map((request) => request.id)).toEqual(["1"]);
     });
 });

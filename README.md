@@ -2,50 +2,51 @@
 
 A simple SvelteKit application for managing team leave requests and viewing weekly on-call rotation conflicts.
 
-The application uses a fixed team list, allows leave requests to be created and managed, prevents overlapping leave requests for the same person, and highlights weeks where the on-call person is on approved leave.
+The application uses a fixed team list, allows leave requests to be created and managed, prevents overlapping leave requests for the same person, and
+highlights weeks where the on-call person is on approved leave.
 
 ## Features
 
-* View fixed team members
-* Create leave requests
-* View leave requests in a list
-* Filter leave requests by team member and status
-* Update leave request status
-* Prevent status changes that would create overlapping pending or approved leave
-* Delete leave requests
-* Prevent overlapping leave requests for the same team member
-* View weekly on-call rotation
-* Highlight conflicts when the on-call person has approved leave
-* Show a warning when the on-call person has pending leave
-* Choose how many upcoming on-call weeks to display
-* Highlight the current on-call week
-* Persist leave requests in browser localStorage
-* Unit tests for date overlap, filtering, and on-call rotation logic
+- View fixed team members
+- Create leave requests
+- View leave requests in a list
+- Filter leave requests by team member and status
+- Update leave request status
+- Prevent status changes that would create overlapping pending or approved leave
+- Delete leave requests
+- Prevent overlapping leave requests for the same team member
+- View weekly on-call rotation
+- Highlight conflicts when the on-call person has approved leave
+- Show a warning when the on-call person has pending leave
+- Choose how many upcoming on-call weeks to display
+- Highlight the current on-call week
+- Persist leave requests in browser localStorage
+- Unit tests for date overlap, filtering, and on-call rotation logic
 
 ## Team Members
 
 The application uses the following fixed team members:
 
-* Alice
-* Bob
-* Charlie
-* Diana
+- Alice
+- Bob
+- Charlie
+- Diana
 
 ## Leave Request Fields
 
 Each leave request contains:
 
-* Team member
-* Start date
-* End date
-* Reason
-* Status
+- Team member
+- Start date
+- End date
+- Reason
+- Status
 
 Supported statuses:
 
-* Pending
-* Approved
-* Rejected
+- Pending
+- Approved
+- Rejected
 
 ## On-Call Rotation
 
@@ -64,12 +65,12 @@ If the on-call person has approved leave during their on-call week, the schedule
 
 ## Tech Stack
 
-* SvelteKit
-* TypeScript
-* date-fns
-* localStorage
-* Vite environment variables
-* Vitest
+- SvelteKit
+- TypeScript
+- date-fns
+- localStorage
+- Vite environment variables
+- Vitest
 
 ## Setup
 
@@ -103,7 +104,8 @@ npm test
 
 ## Environment Configuration
 
-The app has sensible defaults, but these values can be configured with Vite environment variables. Copy `.env.example` to `.env` if you want to override them.
+The app has sensible defaults, but these values can be configured with Vite environment variables. Copy `.env.example` to `.env` if you want to
+override them.
 
 ```bash
 cp .env.example .env
@@ -118,19 +120,18 @@ VITE_DEFAULT_ON_CALL_WEEK_COUNT=8
 VITE_ON_CALL_WEEK_COUNT_OPTIONS=4,8,12
 ```
 
-
 ## Assumptions
 
-* Team members are fixed and cannot be created, edited, or deleted.
-* No authentication or user registration is required.
-* Data is stored in the browser using localStorage.
-* Leave dates are treated as inclusive.
-* Pending and approved leave requests block overlapping leave requests for the same team member.
-* Rejected leave requests do not block new leave requests.
-* On-call conflicts are highlighted only for approved leave.
-* Pending leave during an on-call week is shown as a warning, not as a blocking conflict.
-* The on-call rotation starts on Monday, `2026-06-15`, with Alice.
-* The app is intended to run locally.
+- Team members are fixed and cannot be created, edited, or deleted.
+- No authentication or user registration is required.
+- Data is stored in the browser using localStorage.
+- Leave dates are treated as inclusive.
+- Pending and approved leave requests block overlapping leave requests for the same team member.
+- Rejected leave requests do not block new leave requests.
+- On-call conflicts are highlighted only for approved leave.
+- Pending leave during an on-call week is shown as a warning, not as a blocking conflict.
+- The on-call rotation starts on Monday, `2026-06-15`, with Alice.
+- The app is intended to run locally.
 
 ## Date Overlap Rules
 
@@ -154,42 +155,42 @@ These two requests do not overlap:
 
 ## Completed Requirements
 
-* View team members
-* Create a leave request for a team member
-* View leave requests in a list
-* Prevent overlapping leave requests for the same person
-* Mark leave requests as Pending, Approved, or Rejected
-* Prevent invalid status changes that would create overlapping active leave
-* View an on-call rotation schedule
-* Show clearly when the on-call person is on approved leave
-* Include setup and run instructions
-* Include assumptions and incomplete features
+- View team members
+- Create a leave request for a team member
+- View leave requests in a list
+- Prevent overlapping leave requests for the same person
+- Mark leave requests as Pending, Approved, or Rejected
+- Prevent invalid status changes that would create overlapping active leave
+- View an on-call rotation schedule
+- Show clearly when the on-call person is on approved leave
+- Include setup and run instructions
+- Include assumptions and incomplete features
 
 ## Optional Improvements Added
 
-* Filtering by team member
-* Filtering by leave status
-* Delete leave requests
-* localStorage persistence
-* Basic unit tests
-* Improved visual conflict highlighting
-* Visual status styling for Pending, Approved, and Rejected requests
-* Pending leave warnings in the on-call schedule
-* Current week highlighting
-* Configurable on-call week count
+- Filtering by team member
+- Filtering by leave status
+- Delete leave requests
+- localStorage persistence
+- Basic unit tests
+- Improved visual conflict highlighting
+- Visual status styling for Pending, Approved, and Rejected requests
+- Pending leave warnings in the on-call schedule
+- Current week highlighting
+- Configurable on-call week count
 
 ## Not Implemented
 
-* User authentication
-* User registration
-* Backend API
-* Database persistence
-* Calendar month view
-* Automatic on-call reassignment
-* Leave approval workflow with separate user roles
-* Comments on leave requests
-* Docker setup
-* REST API documentation
+- User authentication
+- User registration
+- Backend API
+- Database persistence
+- Calendar month view
+- Automatic on-call reassignment
+- Leave approval workflow with separate user roles
+- Comments on leave requests
+- Docker setup
+- REST API documentation
 
 ## Project Structure
 
@@ -222,12 +223,12 @@ src/
 
 The unit tests focus on the most important business logic:
 
-* inclusive date overlap detection
-* preventing overlapping leave for the same member
-* filtering and sorting leave requests
-* ignoring rejected leave during overlap checks
-* weekly on-call rotation calculation
-* approved leave conflict detection
+- inclusive date overlap detection
+- preventing overlapping leave for the same member
+- filtering and sorting leave requests
+- ignoring rejected leave during overlap checks
+- weekly on-call rotation calculation
+- approved leave conflict detection
 
 UI component tests are not included because the main risk in this project is date and rotation correctness.
 
@@ -235,12 +236,12 @@ UI component tests are not included because the main risk in this project is dat
 
 Possible improvements:
 
-* Calendar month view
-* Better date formatting
-* Automatic on-call replacement suggestion
-* Backend API
-* Database storage
-* Docker setup
-* Component tests
-* End-to-end tests
-* More detailed leave approval workflow
+- Calendar month view
+- Better date formatting
+- Automatic on-call replacement suggestion
+- Backend API
+- Database storage
+- Docker setup
+- Component tests
+- End-to-end tests
+- More detailed leave approval workflow

@@ -13,27 +13,17 @@ import type {LeaveRequest} from "$lib/types";
 
 describe("rangesOverlap", () => {
     it("detects overlapping inclusive ranges", () => {
-        expect(rangesOverlap("2026-06-10", "2026-06-12", "2026-06-12", "2026-06-15")).toBe(
-            true,
-        );
-        expect(rangesOverlap("2026-06-12", "2026-06-15", "2026-06-10", "2026-06-12")).toBe(
-            true,
-        );
+        expect(rangesOverlap("2026-06-10", "2026-06-12", "2026-06-12", "2026-06-15")).toBe(true);
+        expect(rangesOverlap("2026-06-12", "2026-06-15", "2026-06-10", "2026-06-12")).toBe(true);
     });
 
     it("detects non-overlapping ranges", () => {
-        expect(rangesOverlap("2026-06-10", "2026-06-12", "2026-06-13", "2026-06-15")).toBe(
-            false,
-        );
-        expect(rangesOverlap("2026-06-13", "2026-06-15", "2026-06-10", "2026-06-12")).toBe(
-            false,
-        );
+        expect(rangesOverlap("2026-06-10", "2026-06-12", "2026-06-13", "2026-06-15")).toBe(false);
+        expect(rangesOverlap("2026-06-13", "2026-06-15", "2026-06-10", "2026-06-12")).toBe(false);
     });
 
     it("detects same-day overlap", () => {
-        expect(rangesOverlap("2026-06-10", "2026-06-10", "2026-06-10", "2026-06-10")).toBe(
-            true,
-        );
+        expect(rangesOverlap("2026-06-10", "2026-06-10", "2026-06-10", "2026-06-10")).toBe(true);
     });
 });
 
