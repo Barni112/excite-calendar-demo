@@ -1,0 +1,9 @@
+import type {TeamMember} from "$lib/types";
+
+
+export const teamMembers: TeamMember[] = [
+    {id: "1", name: "Alice"},
+    {id: "2", name: "Bob"},
+    {id: "3", name: "Charlie"},
+    {id: "4", name: "Diana"},
+];
